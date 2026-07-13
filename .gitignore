@@ -1,0 +1,61 @@
+# ============================
+# DroneLab
+# ============================
+
+# Third-party repositories
+infrastructure/ardupilot/
+infrastructure/ardupilot_gazebo/
+
+# ROS
+build/
+install/
+log/
+
+# Colcon
+**/build/
+**/install/
+**/log/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# Virtual environments
+venv-*
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+archive/
+
+# Results
+results/videos/
+results/logs/
+
+# Datasets
+datasets/raw/
+datasets/processed/
+datasets/synthetic/
+datasets/rosbags/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Gazebo
+*.state
+
