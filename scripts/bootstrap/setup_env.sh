@@ -20,7 +20,7 @@ fi
 # ---------- Gazebo ----------
 export GZ_SIM_SYSTEM_PLUGIN_PATH="$DRONELAB_ROOT/infrastructure/ardupilot_gazebo/build:${GZ_SIM_SYSTEM_PLUGIN_PATH}"
 
-export GZ_SIM_RESOURCE_PATH="$DRONELAB_ROOT/infrastructure/ardupilot_gazebo/models:$DRONELAB_ROOT/infrastructure/ardupilot_gazebo/worlds:${GZ_SIM_RESOURCE_PATH}"
+export GZ_SIM_RESOURCE_PATH="$DRONELAB_ROOT/simulation/models:$DRONELAB_ROOT/infrastructure/ardupilot_gazebo/models:$DRONELAB_ROOT/infrastructure/ardupilot_gazebo/worlds:${GZ_SIM_RESOURCE_PATH}"
 
 echo
 echo "=========================================="

@@ -8,6 +8,7 @@ cd "$DRONELAB_ROOT/infrastructure/ardupilot"
 
 Tools/autotest/sim_vehicle.py \
 -v ArduCopter \
+-f gazebo-iris \
 --model JSON \
 --console \
 --map
