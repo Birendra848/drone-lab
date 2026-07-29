@@ -3,4 +3,4 @@
 source "$HOME/drone-lab/scripts/bootstrap/setup_env.sh"
 
 exec gz sim -r \
-"$DRONELAB_ROOT/simulation/worlds/iris_runway.sdf"
+"$DRONELAB_ROOT/simulation/worlds/ship_landing.sdf"
