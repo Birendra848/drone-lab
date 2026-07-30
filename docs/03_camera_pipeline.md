@@ -160,3 +160,19 @@ Corner Extraction
     ▼
 Pose Estimation
 ```
+---
+
+# Camera Bridge Automation
+
+To avoid manually starting each camera bridge, use the helper script:
+
+```bash
+~/drone-lab/scripts/launch/start_camera_bridge.sh
+```
+
+The script automatically launches two ROS-Gazebo bridges:
+
+- Downward RGB camera
+- Gimbal RGB camera
+
+This replaces the need to manually execute two `ros2 run ros_gz_bridge parameter_bridge ...` commands every session.

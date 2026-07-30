@@ -188,6 +188,19 @@ This repository is under continuous development as part of my M.S. research.
 
 ---
 
+## Quick Start
+
+```bash
+# Start simulation
+./scripts/launch/start_simulation.sh
+
+# Start camera bridges
+./scripts/launch/start_camera_bridge.sh
+
+# View camera feed
+ros2 run rqt_image_view rqt_image_view
+```
+
 # License
 
 This project is released under the **MIT License**.
