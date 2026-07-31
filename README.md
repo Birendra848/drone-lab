@@ -200,6 +200,26 @@ This repository is under continuous development as part of my M.S. research.
 # View camera feed
 ros2 run rqt_image_view rqt_image_view
 ```
+## Current Stable Baseline (v0.4.0)
+
+Simulation
+----------
+✓ Official iris_with_gimbal
+✓ Official gimbal camera
+✓ Gazebo Harmonic
+✓ ArduPilot SITL
+
+Vision
+------
+✓ ROS2 image stream
+✓ ros_gz_bridge
+✓ OpenCV image pipeline
+
+Next Sprint
+-----------
+ArUco detection
+Pose estimation
+Precision landing
 
 # License
 
