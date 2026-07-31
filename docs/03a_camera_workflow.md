@@ -1,41 +1,122 @@
 # Camera Workflow
 
-This document describes the daily workflow for launching the simulation and viewing the camera feeds.
+This document describes the standard workflow for launching the DroneLab simulation, starting the camera bridges, and viewing the camera feeds.
+
+---
+
+# Purpose
+
+After completing this workflow, you should be able to:
+
+- Launch the Gazebo simulation
+- Start ArduPilot SITL
+- Bridge Gazebo camera topics to ROS 2
+- View live camera feeds
+- Verify that the camera pipeline is working correctly
+
+This workflow should be completed before starting any computer vision experiments such as ArUco detection or pose estimation.
 
 ---
 
 # Prerequisites
 
-- ROS 2 Jazzy installed
-- Gazebo Harmonic installed
-- ArduPilot SITL built
-- drone-lab workspace available
+Make sure the following are installed and working:
+
+- Ubuntu 24.04 LTS
+- ROS 2 Jazzy
+- Gazebo Harmonic
+- ArduPilot SITL
+- DroneLab workspace
 
 ---
 
-# Step 1 – Start the Simulation
+# Launch Options
+
+Choose **only one** of the following commands.
+
+## Option 1 – Simulation Only
+
+Starts:
+
+- Gazebo
+- ArduPilot SITL
+
+Use this when you only want the simulator.
 
 ```bash
 ~/drone-lab/scripts/launch/start_simulation.sh
 ```
 
-Wait until:
+---
 
-- Gazebo opens
-- Ship world loads
-- Drone spawns
-- ArduPilot connects
-- Simulation starts
+## Option 2 – Simulation + Camera Bridges
+
+Starts:
+
+- Gazebo
+- SITL
+- Camera Bridges
+
+Use this when developing ROS or OpenCV nodes.
+
+```bash
+~/drone-lab/scripts/launch/start_simulation.sh --bridge
+```
 
 ---
 
-# Step N – Verify Gazebo Camera Topics (Optional)
+## Option 3 – Everything
+
+Starts:
+
+- Gazebo
+- SITL
+- Camera Bridges
+- Image Viewer
+
+Recommended for daily development.
+
+```bash
+~/drone-lab/scripts/launch/start_simulation.sh --all
+```
+
+---
+
+# Step 1 – Wait for the Simulation
+
+Do not continue immediately.
+
+Wait until all of the following happen:
+
+✅ Gazebo opens
+
+✅ The Ship Landing world loads
+
+✅ The drone appears
+
+✅ MAVProxy console opens
+
+✅ ArduPilot reports it is connected
+
+The simulation should now be running.
+
+---
+
+# Step 2 – Verify Gazebo Camera Topics (Recommended)
+
+## Why?
+
+This confirms that Gazebo is publishing camera images.
+
+If these topics do not exist, the camera itself is not working.
+
+Run:
 
 ```bash
 gz topic -l | grep image
 ```
 
-Expected:
+Expected output:
 
 ```
 /world/iris_runway/model/iris_ship_landing/model/camera_down/link/pitch_link/sensor/camera_down/image
@@ -43,24 +124,62 @@ Expected:
 /world/iris_runway/model/iris_ship_landing/model/gimbal/link/pitch_link/sensor/camera/image
 ```
 
+### Success
+
+Both topics are listed.
+
+Proceed to the next step.
+
+### Failure
+
+If no topics appear:
+
+- Check that Gazebo finished loading.
+- Verify that the correct world was launched.
+- Verify that the drone model contains both cameras.
+
+Do **not** continue until these topics appear.
+
 ---
 
-# Step 2 – Start Camera Bridges
+# Step 3 – Start Camera Bridges
 
-Open a new terminal.
+Skip this step if you used:
+
+```bash
+start_simulation.sh --bridge
+```
+
+or
+
+```bash
+start_simulation.sh --all
+```
+
+Otherwise run:
 
 ```bash
 ~/drone-lab/scripts/launch/start_camera_bridge.sh
 ```
 
-The script automatically launches:
+The script starts:
 
-- Downward camera bridge
-- Gimbal camera bridge
+- Downward Camera Bridge
+- Gimbal Camera Bridge
+
+Leave these terminals open.
 
 ---
 
-# Step 3 – Verify ROS Topics (Optional)
+# Step 4 – Verify ROS Topics (Recommended)
+
+## Why?
+
+The previous step only confirms Gazebo is publishing images.
+
+This step confirms that the ROS-Gazebo bridge is forwarding those images into ROS 2.
+
+Run:
 
 ```bash
 ros2 topic list | grep image
@@ -74,53 +193,94 @@ Expected output:
 /world/iris_runway/model/iris_ship_landing/model/gimbal/link/pitch_link/sensor/camera/image
 ```
 
+### Success
+
+Both topics are visible.
+
+The bridge is working correctly.
+
+### Failure
+
+If nothing appears:
+
+- Check that the bridge terminals are still running.
+- Look for error messages in the bridge terminals.
+- Restart the camera bridge.
+
 ---
 
-# Step 4 – Open Image Viewer
+# Step 5 – Open Image Viewer
+
+Skip this step if you launched:
+
+```bash
+start_simulation.sh --all
+```
+
+Otherwise run:
 
 ```bash
 ros2 run rqt_image_view rqt_image_view
 ```
 
-Choose either camera topic from the dropdown.
-
-To view both cameras simultaneously, launch another instance:
-
-```bash
-ros2 run rqt_image_view rqt_image_view
-```
-
 ---
 
-# Step 5 – Verify ROS Topics (Optional)
+# Step 6 – Select a Camera Topic
 
-```bash
-ros2 topic list | grep image
-```
+When rqt_image_view opens:
 
-Expected:
+Click the topic dropdown.
+
+You should see:
 
 ```
 /world/iris_runway/model/iris_ship_landing/model/camera_down/link/pitch_link/sensor/camera_down/image
+```
 
+and
+
+```
 /world/iris_runway/model/iris_ship_landing/model/gimbal/link/pitch_link/sensor/camera/image
 ```
 
 ---
 
-# Step 6 – Open Camera Viewer
+## Downward Camera
 
-```bash
-ros2 run rqt_image_view rqt_image_view
+Select:
+
+```
+/world/iris_runway/model/iris_ship_landing/model/camera_down/link/pitch_link/sensor/camera_down/image
 ```
 
-Select one of the available topics from the dropdown menu.
+Use this camera for:
+
+- ArUco Detection
+- Pose Estimation
+- Landing Controller
+- Autonomous Landing
 
 ---
 
-# View Both Cameras
+## Gimbal Camera
 
-Launch a second viewer.
+Select:
+
+```
+/world/iris_runway/model/iris_ship_landing/model/gimbal/link/pitch_link/sensor/camera/image
+```
+
+Use this camera for:
+
+- General inspection
+- Navigation
+- Scene visualization
+
+---
+
+# Viewing Both Cameras
+
+Launch a second image viewer.
 
 ```bash
 ros2 run rqt_image_view rqt_image_view
@@ -129,96 +289,67 @@ ros2 run rqt_image_view rqt_image_view
 Viewer 1
 
 ```
-/world/iris_runway/model/iris_ship_landing/model/camera_down/link/pitch_link/sensor/camera_down/image
+Downward Camera
 ```
 
 Viewer 2
 
 ```
-/world/iris_runway/model/iris_ship_landing/model/gimbal/link/pitch_link/sensor/camera/image
+Gimbal Camera
 ```
 
 ---
 
-# Terminal Layout
+# Expected Terminal Layout
 
+If using:
+
+```bash
+start_simulation.sh --all
+```
+
+You should have:
+
+```
 Terminal 1
-
-```
-start_simulation.sh
+Gazebo
 ```
 
+```
 Terminal 2
-
-```
-camera_down bridge
+ArduPilot SITL
 ```
 
+```
 Terminal 3
-
-```
-gimbal bridge
+Camera Bridges
 ```
 
+```
 Terminal 4
-
-```
 rqt_image_view
-```
-
-Terminal 5 (Optional)
-
-```
-second rqt_image_view
 ```
 
 ---
 
 # Shutdown
 
-Close:
+Close applications in this order:
 
-- rqt_image_view
-- ros_gz_bridge terminals
-- Gazebo
-- SITL
-
----
-
-# Notes
-
-Current camera topics:
-
-```
-Downward Camera
-
-/world/iris_runway/model/iris_ship_landing/model/camera_down/link/pitch_link/sensor/camera_down/image
-
-
-Gimbal Camera
-
-/world/iris_runway/model/iris_ship_landing/model/gimbal/link/pitch_link/sensor/camera/image
-```
+1. rqt_image_view
+2. Camera Bridge
+3. Gazebo
+4. ArduPilot SITL
 
 ---
 
-# Next Phase
+# Workflow Complete
 
-Use the downward camera topic for:
+At this point the camera pipeline is fully operational.
 
-- OpenCV image subscriber
-- ArUco detection
+You are ready to begin:
+
+- OpenCV image subscription
+- ArUco marker detection
 - Pose estimation
-- Autonomous landing controller
-
-```
-# Terminal 1
-~/drone-lab/scripts/launch/start_simulation.sh
-
-# Terminal 2
-~/drone-lab/scripts/launch/start_camera_bridge.sh
-
-# Terminal 3
-ros2 run rqt_image_view rqt_image_view
-
-```
+- Autonomous landing experiments

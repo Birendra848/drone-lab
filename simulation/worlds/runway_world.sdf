@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.9">
-  <world name="iris_runway">
+  <world name="runway_world">
     <physics name="1ms" type="ignore">
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>
@@ -116,7 +116,7 @@
     </include>
 
     <include>
-      <uri>model://iris_ship_landing</uri>
+      <uri>model://iris_with_gimbal</uri>
       <pose degrees="true">0 0 0.195 0 0 90</pose>
     </include>
 
