@@ -25,6 +25,7 @@ setup(
     entry_points={
     'console_scripts': [
         'camera_viewer = vision_landing.nodes.camera_viewer_node:main',
+        "camera_subscriber = vision_landing.nodes.camera_subscriber:main",
     ],
     },
 )
